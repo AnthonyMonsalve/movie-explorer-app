@@ -219,13 +219,15 @@ const HomePage = () => {
             <MovieGrid movies={moviesToShow} onSelect={handleSelectMovie} />
           )}
           {shouldShowPagination ? (
-            <Pagination
-              page={page}
-              totalPages={totalPages}
-              totalResults={totalResults}
-              onChange={handlePageChange}
-              disabled={isLoading}
-            />
+            <div className="pagination-bar">
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                totalResults={totalResults}
+                onChange={handlePageChange}
+                disabled={isLoading}
+              />
+            </div>
           ) : null}
         </section>
       ) : null}

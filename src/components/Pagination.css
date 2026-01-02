@@ -37,16 +37,18 @@
 }
 
 @media (max-width: 640px) {
-  .pagination {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
   .pagination button {
     width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    gap: 6px;
   }
 
   .pagination-info {
     justify-content: center;
+  }
+
+  .pagination button .label {
+    display: none;
   }
 }

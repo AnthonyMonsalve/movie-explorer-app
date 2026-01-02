@@ -12,6 +12,9 @@ type FilterBarProps = {
   disabled?: boolean;
 };
 
+const hasActiveFilters = (type: FilterType, year: string) =>
+  Boolean(type) || Boolean(year.trim());
+
 const FilterBar = ({
   type,
   year,
@@ -21,6 +24,8 @@ const FilterBar = ({
   onApply,
   disabled,
 }: FilterBarProps) => {
+  const showReset = hasActiveFilters(type, year);
+
   return (
     <div className="filter-bar">
       <div className="filter-control">
@@ -60,14 +65,16 @@ const FilterBar = ({
         >
           Filtrar
         </button>
-        <button
-          className="filter-reset"
-          type="button"
-          onClick={onReset}
-          disabled={disabled}
-        >
-          Limpiar filtros
-        </button>
+        {showReset ? (
+          <button
+            className="filter-reset"
+            type="button"
+            onClick={onReset}
+            disabled={disabled}
+          >
+            Limpiar filtros
+          </button>
+        ) : null}
       </div>
     </div>
   );
