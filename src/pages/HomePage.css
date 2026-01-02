@@ -1,0 +1,134 @@
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 24px 96px;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--green);
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(0, 220, 115, 0.08);
+  border: 1px solid rgba(0, 220, 115, 0.18);
+  width: fit-content;
+  position: relative;
+  top: 10px;
+}
+
+.hero {
+  background: linear-gradient(145deg, rgba(5, 140, 255, 0.18), rgba(105, 70, 255, 0.14));
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: var(--shadow-strong);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(0, 220, 115, 0.25), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(5, 140, 255, 0.22), transparent 35%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 20px;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 5vw, 46px);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.lead {
+  color: var(--text-secondary);
+  max-width: 680px;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.search-area {
+  display: grid;
+  gap: 12px;
+  align-items: center;
+  grid-template-columns: 1fr;
+}
+
+.search-hint {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.section {
+  margin-top: 42px;
+  display: grid;
+  gap: 16px;
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.muted {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.status {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-primary);
+}
+
+.status-error {
+  border-color: rgba(255, 107, 107, 0.6);
+  background: rgba(255, 107, 107, 0.12);
+}
+
+.results-toolbar {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+
+
+@media (max-width: 720px) {
+  .page {
+    padding: 32px 18px 64px;
+  }
+
+  .hero {
+    padding: 28px;
+  }
+}
