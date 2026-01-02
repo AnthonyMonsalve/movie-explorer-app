@@ -1,11 +1,15 @@
 import { useState } from "react";
-import type { OmdbSearchItem } from "../api/omdbApi.ts";
+import type {
+  OmdbMovieDetailResponse,
+  OmdbSearchItem,
+} from "../api/omdbApi.ts";
 import { omdbApi } from "../api/omdbApi.ts";
 import nexteplogo from "../assets/nextepmovie.png";
 import FilterBar from "../components/FilterBar";
 import type { MovieCardProps } from "../components/MovieCard";
+import MovieDetailModal from "../components/MovieDetailModal";
 import MovieGrid from "../components/MovieGrid";
-import Pagination from "../components/Pagination.tsx";
+import Pagination from "../components/Pagination";
 import SearchBar from "../components/SearchBar";
 import "./HomePage.css";
 
@@ -33,6 +37,11 @@ const HomePage = () => {
     type: "",
     year: "",
   });
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedDetail, setSelectedDetail] =
+    useState<OmdbMovieDetailResponse | null>(null);
+  const [isDetailLoading, setIsDetailLoading] = useState(false);
+  const [detailError, setDetailError] = useState<string | null>(null);
 
   const performSearch = async (
     term: string,
@@ -58,9 +67,14 @@ const HomePage = () => {
       setTotalResults(apiTotal);
       setPage(nextPage);
       setFilters(nextFilters);
+      if (!apiTotal) {
+        setError("No encontramos resultados para tu búsqueda.");
+      }
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : "Error al buscar peliculas";
+        err instanceof Error && err.message.toLowerCase().includes("movie not found")
+          ? "No encontramos resultados para tu búsqueda."
+          : "No pudimos cargar resultados. Intenta nuevamente.";
       setError(message);
       setResults([]);
       setTotalResults(0);
@@ -70,9 +84,20 @@ const HomePage = () => {
   };
 
   const handleSearch = async (term: string) => {
-    if (!term) return;
-    setQuery(term);
-    await performSearch(term, 1, filters);
+    const trimmed = term.trim();
+    if (!trimmed) {
+      setError("Ingresa un titulo para buscar.");
+      setHasSearched(false);
+      return;
+    }
+    if (trimmed.length > 50) {
+      setError("El titulo no puede superar 50 caracteres.");
+      setHasSearched(false);
+      return;
+    }
+    setError(null);
+    setQuery(trimmed);
+    await performSearch(trimmed, 1, filters);
   };
 
   const handleTypeChange = (type: FilterType) => {
@@ -110,6 +135,27 @@ const HomePage = () => {
   const totalPages = Math.max(1, Math.ceil(totalResults / PAGE_SIZE));
   const shouldShowPagination = moviesToShow.length > 0 && totalPages > 1;
 
+  const handleSelectMovie = async (id: string) => {
+    setSelectedId(id);
+    setIsDetailLoading(true);
+    setDetailError(null);
+    setSelectedDetail(null);
+    try {
+      const data = await omdbApi.getById(id, "full");
+      setSelectedDetail(data);
+    } catch {
+      setDetailError("No pudimos cargar el detalle. Intenta nuevamente.");
+    } finally {
+      setIsDetailLoading(false);
+    }
+  };
+
+  const handleCloseDetail = () => {
+    setSelectedId(null);
+    setSelectedDetail(null);
+    setDetailError(null);
+  };
+
   return (
     <div className="page">
       <section>
@@ -135,8 +181,8 @@ const HomePage = () => {
               isLoading={isLoading}
             />
             <p className="search-hint">
-              Tip: empieza con un titulo y luego refina por anio o tipo. Los
-              resultados se muestran en la cuadrigula inferior.
+              Tip: Escribe el titulo de la pelicula, serie o capitulo para
+              mejores resultados.
             </p>
           </div>
         </div>
@@ -169,7 +215,9 @@ const HomePage = () => {
             <div className="status">Sin resultados para esa busqueda.</div>
           ) : null}
 
-          {moviesToShow.length > 0 && <MovieGrid movies={moviesToShow} />}
+          {moviesToShow.length > 0 && (
+            <MovieGrid movies={moviesToShow} onSelect={handleSelectMovie} />
+          )}
           {shouldShowPagination ? (
             <Pagination
               page={page}
@@ -181,6 +229,13 @@ const HomePage = () => {
           ) : null}
         </section>
       ) : null}
+      <MovieDetailModal
+        isOpen={Boolean(selectedId)}
+        detail={selectedDetail}
+        isLoading={isDetailLoading}
+        error={detailError}
+        onClose={handleCloseDetail}
+      />
     </div>
   );
 };

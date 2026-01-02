@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   min-height: 260px;
+  cursor: pointer;
 }
 
 .movie-card:hover {
@@ -37,9 +38,9 @@
   right: 12px;
   padding: 6px 10px;
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.5);
   font-size: 12px;
   text-transform: capitalize;
+  border: 1px solid var(--border);
 }
 
 .movie-card-body {
@@ -70,4 +71,22 @@
   border: 1px solid var(--border);
   font-size: 12px;
   color: var(--text-primary);
+}
+
+.badge-movie {
+  background: var(--purple);
+  color: #fff;
+  border-color: var(--purple);
+}
+
+.badge-series {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
+.badge-episode {
+  background: var(--green);
+  color: #001313;
+  border-color: var(--green);
 }

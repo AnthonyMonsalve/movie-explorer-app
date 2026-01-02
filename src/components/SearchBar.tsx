@@ -22,6 +22,7 @@ const SearchBar = ({ value, onChange, onSubmit, placeholder, isLoading }: Search
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
+        maxLength={50}
         aria-label="Buscar películas"
       />
       <button type="submit" disabled={!value.trim() || isLoading}>
