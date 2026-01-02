@@ -3,13 +3,14 @@ import './MovieGrid.css'
 
 type MovieGridProps = {
   movies: MovieCardProps[]
+  onSelect?: (id: string) => void
 }
 
-const MovieGrid = ({ movies }: MovieGridProps) => {
+const MovieGrid = ({ movies, onSelect }: MovieGridProps) => {
   return (
     <div className="movie-grid">
       {movies.map((movie) => (
-        <MovieCard key={movie.id} movie={movie} />
+        <MovieCard key={movie.id} movie={movie} onSelect={onSelect} />
       ))}
     </div>
   )

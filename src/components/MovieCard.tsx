@@ -1,31 +1,33 @@
-import "./MovieCard.css";
+import './MovieCard.css'
 
 export type MovieCardProps = {
-  id: string;
-  title: string;
-  year: string;
-  type: string;
-  poster?: string;
-};
+  id: string
+  title: string
+  year: string
+  type: string
+  poster?: string
+}
 
 type MovieCardComponentProps = {
-  movie: MovieCardProps;
-};
+  movie: MovieCardProps
+  onSelect?: (id: string) => void
+}
 
-const MovieCard = ({ movie }: MovieCardComponentProps) => {
-  const hasPoster = Boolean(movie.poster);
+const MovieCard = ({ movie, onSelect }: MovieCardComponentProps) => {
+  const hasPoster = Boolean(movie.poster)
 
   return (
-    <article className="movie-card">
+    <article
+      className="movie-card"
+      role="button"
+      tabIndex={0}
+      onClick={() => onSelect?.(movie.id)}
+    >
       <div className="poster">
         {hasPoster ? (
-          <img
-            src={movie.poster}
-            alt={`Póster de ${movie.title}`}
-            loading="lazy"
-          />
+          <img src={movie.poster} alt={`Poster de ${movie.title}`} loading="lazy" />
         ) : (
-          <span className="pill">Sin póster</span>
+          <span className="pill">Sin poster</span>
         )}
         <span className="poster-badge">{movie.type}</span>
       </div>
@@ -36,7 +38,7 @@ const MovieCard = ({ movie }: MovieCardComponentProps) => {
         </div>
       </div>
     </article>
-  );
-};
+  )
+}
 
-export default MovieCard;
+export default MovieCard
