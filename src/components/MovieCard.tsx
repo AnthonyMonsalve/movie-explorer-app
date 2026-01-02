@@ -15,6 +15,12 @@ type MovieCardComponentProps = {
 
 const MovieCard = ({ movie, onSelect }: MovieCardComponentProps) => {
   const hasPoster = Boolean(movie.poster)
+  const badgeClass =
+    movie.type === 'movie'
+      ? 'poster-badge badge-movie'
+      : movie.type === 'series'
+        ? 'poster-badge badge-series'
+        : 'poster-badge badge-episode'
 
   return (
     <article
@@ -29,7 +35,7 @@ const MovieCard = ({ movie, onSelect }: MovieCardComponentProps) => {
         ) : (
           <span className="pill">Sin poster</span>
         )}
-        <span className="poster-badge">{movie.type}</span>
+        <span className={badgeClass}>{movie.type}</span>
       </div>
       <div className="movie-card-body">
         <h3 className="movie-title">{movie.title}</h3>

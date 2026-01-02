@@ -1,13 +1,16 @@
 import { useState } from "react";
-import type { OmdbMovieDetailResponse, OmdbSearchItem } from "../api/omdbApi.ts";
+import type {
+  OmdbMovieDetailResponse,
+  OmdbSearchItem,
+} from "../api/omdbApi.ts";
 import { omdbApi } from "../api/omdbApi.ts";
 import nexteplogo from "../assets/nextepmovie.png";
 import FilterBar from "../components/FilterBar";
 import type { MovieCardProps } from "../components/MovieCard";
+import MovieDetailModal from "../components/MovieDetailModal";
 import MovieGrid from "../components/MovieGrid";
 import Pagination from "../components/Pagination";
 import SearchBar from "../components/SearchBar";
-import MovieDetailModal from "../components/MovieDetailModal";
 import "./HomePage.css";
 
 type FilterType = "" | "movie" | "series" | "episode";
@@ -64,9 +67,14 @@ const HomePage = () => {
       setTotalResults(apiTotal);
       setPage(nextPage);
       setFilters(nextFilters);
+      if (!apiTotal) {
+        setError("No encontramos resultados para tu búsqueda.");
+      }
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : "Error al buscar peliculas";
+        err instanceof Error && err.message.toLowerCase().includes("movie not found")
+          ? "No encontramos resultados para tu búsqueda."
+          : "No pudimos cargar resultados. Intenta nuevamente.";
       setError(message);
       setResults([]);
       setTotalResults(0);
@@ -76,9 +84,20 @@ const HomePage = () => {
   };
 
   const handleSearch = async (term: string) => {
-    if (!term) return;
-    setQuery(term);
-    await performSearch(term, 1, filters);
+    const trimmed = term.trim();
+    if (!trimmed) {
+      setError("Ingresa un titulo para buscar.");
+      setHasSearched(false);
+      return;
+    }
+    if (trimmed.length > 50) {
+      setError("El titulo no puede superar 50 caracteres.");
+      setHasSearched(false);
+      return;
+    }
+    setError(null);
+    setQuery(trimmed);
+    await performSearch(trimmed, 1, filters);
   };
 
   const handleTypeChange = (type: FilterType) => {
@@ -124,10 +143,8 @@ const HomePage = () => {
     try {
       const data = await omdbApi.getById(id, "full");
       setSelectedDetail(data);
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Error al cargar detalle";
-      setDetailError(message);
+    } catch {
+      setDetailError("No pudimos cargar el detalle. Intenta nuevamente.");
     } finally {
       setIsDetailLoading(false);
     }
@@ -164,8 +181,8 @@ const HomePage = () => {
               isLoading={isLoading}
             />
             <p className="search-hint">
-              Tip: empieza con un titulo y luego refina por anio o tipo. Los
-              resultados se muestran en la cuadrigula inferior.
+              Tip: Escribe el titulo de la pelicula, serie o capitulo para
+              mejores resultados.
             </p>
           </div>
         </div>
