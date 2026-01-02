@@ -1,0 +1,100 @@
+.filter-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  align-items: end;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card-bg);
+}
+
+.filter-control {
+  display: grid;
+  gap: 6px;
+}
+
+.filter-control label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.filter-control select,
+.filter-control input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: var(--text-primary);
+}
+
+.filter-control select {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 12px;
+  color: var(--text-primary);
+}
+
+.filter-control select:focus,
+.filter-control input:focus {
+  outline: none;
+  border-color: rgba(5, 140, 255, 0.8);
+  box-shadow: 0 0 0 3px rgba(5, 140, 255, 0.2);
+}
+
+.filter-reset {
+  align-self: center;
+  justify-self: start;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+
+.filter-reset:hover:not(:disabled) {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.filter-reset:disabled,
+.filter-control select:disabled,
+.filter-control input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-apply,
+.filter-reset {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease, background-color 120ms ease;
+}
+
+.filter-apply:hover:not(:disabled),
+.filter-reset:hover:not(:disabled) {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.filter-apply:disabled,
+.filter-reset:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
